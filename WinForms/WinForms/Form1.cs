@@ -18,23 +18,23 @@ namespace WinForms
             try
             {
                 // Получаем координаты первого наблюдателя
-                double observer1B = ParserGMS.ParseToDecimal(textBox_OO1_X.Text);
-                double observer1L = ParserGMS.ParseToDecimal(textBox_OO1_Y.Text);
+                double observer1B = double.Parse(textBox_OO1_X.Text);
+                double observer1L = double.Parse(textBox_OO1_Y.Text);
                 double observer1Z = double.Parse(textBox_OO1_Z.Text);
 
                 // Получаем координаты второго наблюдателя
-                double observer2B = ParserGMS.ParseToDecimal(textBox_OO2_X.Text);
-                double observer2L = ParserGMS.ParseToDecimal(textBox_OO2_Y.Text);
+                double observer2B = double.Parse(textBox_OO2_X.Text);
+                double observer2L = double.Parse(textBox_OO2_Y.Text);
                 double observer2Z = double.Parse(textBox_OO2_Z.Text);
 
                 // Получаем координаты БПЛА
-                double droneB = ParserGMS.ParseToDecimal(textBox_BPLA_X.Text);
-                double droneL = ParserGMS.ParseToDecimal(textBox_BPLA_Y.Text);
+                double droneB = double.Parse(textBox_BPLA_X.Text);
+                double droneL = double.Parse(textBox_BPLA_Y.Text);
                 double droneHeight = double.Parse(textBox_BPLA_Z.Text);
 
                 // Получаем координаты цели
-                double targetB = ParserGMS.ParseToDecimal(textBox_T_X.Text);
-                double targetL = ParserGMS.ParseToDecimal(textBox_T_Y.Text);
+                double targetB = double.Parse(textBox_T_X.Text);
+                double targetL = double.Parse(textBox_T_Y.Text);
                 double targetZ = double.Parse(textBox_T_Z.Text);
 
                 // Сохраняем координаты наблюдателей для дальнейших расчетов
@@ -84,6 +84,9 @@ namespace WinForms
                 double sideB = Math.Sqrt(Math.Pow(droneX - targetX, 2) + Math.Pow(droneY - targetY, 2));
                 double sideC = Math.Sqrt(Math.Pow(droneX - observer1X, 2) + Math.Pow(droneY - observer1Y, 2));
 
+                MessageBox.Show($"{sideA}",
+                    "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 double angleA = Math.Sign(-((observer1X - droneX) * (targetY - droneY) - (observer1Y - droneY) * (targetX - droneX))) *
                     Math.Acos((sideB * sideB + sideC * sideC - sideA * sideA) / (2 * sideB * sideC))
                     * 180 / Math.PI;
@@ -98,6 +101,9 @@ namespace WinForms
                 double angleB = Math.Sign(-((observer2X - droneX) * (targetY - droneY) - (observer2Y - droneY) * (targetX - droneX))) *
                     Math.Acos((sideB * sideB + sideC * sideC - sideA * sideA) / (2 * sideB * sideC))
                     * 180 / Math.PI;
+
+                MessageBox.Show($"{sideA}",
+                    "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 textBox_Input_b.Text = angleB.ToString();
 
@@ -153,10 +159,10 @@ namespace WinForms
             try
             {
                 // Получаем входные параметры
-                double observer1B = ParserGMS.ParseToDecimal(textBox_Input_OO1_X.Text);
-                double observer1L = ParserGMS.ParseToDecimal(textBox_Input_OO1_Y.Text);
-                double observer2B = ParserGMS.ParseToDecimal(textBox_Input_OO2_X.Text);
-                double observer2L = ParserGMS.ParseToDecimal(textBox_Input_OO2_Y.Text);
+                double observer1B = double.Parse(textBox_Input_OO1_X.Text);
+                double observer1L = double.Parse(textBox_Input_OO1_Y.Text);
+                double observer2B = double.Parse(textBox_Input_OO2_X.Text);
+                double observer2L = double.Parse(textBox_Input_OO2_Y.Text);
 
                 double BPLA_H = double.Parse(textBoxBPLA_TEST_H.Text);
 
@@ -188,15 +194,15 @@ namespace WinForms
 
                 // Выводим результаты для БПЛА
                 double[] BPLA_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[0][0], result[0][1]);
-                textBox_Rez_BPLA_X.Text = ParserGMS.ParseToDMS(BPLA_WGS84[0] * 180 / Math.PI);
-                textBox_Rez_BPLA_Y.Text = ParserGMS.ParseToDMS(BPLA_WGS84[1] * 180 / Math.PI);
+                textBox_Rez_BPLA_X.Text = (BPLA_WGS84[0] * 180 / Math.PI).ToString();
+                textBox_Rez_BPLA_Y.Text = (BPLA_WGS84[1] * 180 / Math.PI).ToString();
                 textBox_Rez_BPLA_Z.Text = Math.Round(result[0][2], 5).ToString() + " М";
                 //textBox_Rez_BPLA_Z.Text = "";
 
                 // Выводим результаты для цели
                 double[] T_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[1][0], result[1][1]);
-                textBox_Rez_T_X.Text = ParserGMS.ParseToDMS(T_WGS84[0] * 180 / Math.PI);
-                textBox_Rez_T_Y.Text = ParserGMS.ParseToDMS(T_WGS84[1] * 180 / Math.PI);
+                textBox_Rez_T_X.Text = (T_WGS84[0] * 180 / Math.PI).ToString();
+                textBox_Rez_T_Y.Text = (T_WGS84[1] * 180 / Math.PI).ToString();
                 textBox_Rez_T_Z.Text = Math.Round(result[1][2], 5).ToString() + " М";
                 //textBox_Rez_T_Z.Text = "";
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\Вычисление значений погрешности\\WinForms\\WinForms\\WinForms.csproj": {}
+    "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\ДляАнализаGIT\\WinGPSAnaliz\\WinForms\\WinForms\\WinForms.csproj": {}
   },
   "projects": {
-    "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\Вычисление значений погрешности\\WinForms\\WinForms\\WinForms.csproj": {
+    "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\ДляАнализаGIT\\WinGPSAnaliz\\WinForms\\WinForms\\WinForms.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\Вычисление значений погрешности\\WinForms\\WinForms\\WinForms.csproj",
+        "projectUniqueName": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\ДляАнализаGIT\\WinGPSAnaliz\\WinForms\\WinForms\\WinForms.csproj",
         "projectName": "WinForms",
-        "projectPath": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\Вычисление значений погрешности\\WinForms\\WinForms\\WinForms.csproj",
+        "projectPath": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\ДляАнализаGIT\\WinGPSAnaliz\\WinForms\\WinForms\\WinForms.csproj",
         "packagesPath": "C:\\Users\\voevo\\.nuget\\packages\\",
-        "outputPath": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\Вычисление значений погрешности\\WinForms\\WinForms\\obj\\",
+        "outputPath": "C:\\MyDirrectory\\Работа\\Папка с связаным с переводом из WGS84\\Программа Теоритически Тестировать Параметры\\ДляАнализаGIT\\WinGPSAnaliz\\WinForms\\WinForms\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
