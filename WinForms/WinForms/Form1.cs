@@ -46,17 +46,14 @@ namespace WinForms
                 textBoxBPLA_TEST_H.Text = droneHeight.ToString();
 
                 // Проецирование всех данных на плоскость гауса
-                double[] temp = TranslationWGS84.ConvertToGaussKrueger(observer1B * Math.PI / 180, observer1L * Math.PI / 180);
-                double observer1X = temp[0], observer1Y = temp[1];
 
-                temp = TranslationWGS84.ConvertToGaussKrueger(observer2B * Math.PI / 180, observer2L * Math.PI / 180);
-                double observer2X = temp[0], observer2Y = temp[1];
+                (double observer1X, double observer1Y) = TranslationWGS84.ConvertToGaussKrueger(observer1B * Math.PI / 180, observer1L * Math.PI / 180);
 
-                temp = TranslationWGS84.ConvertToGaussKrueger(droneB * Math.PI / 180, droneL * Math.PI / 180);
-                double droneX = temp[0], droneY = temp[1];
+                (double observer2X, double observer2Y) = TranslationWGS84.ConvertToGaussKrueger(observer2B * Math.PI / 180, observer2L * Math.PI / 180);
 
-                temp = TranslationWGS84.ConvertToGaussKrueger(targetB * Math.PI / 180, targetL * Math.PI / 180);
-                double targetX = temp[0], targetY = temp[1];
+                (double droneX, double droneY) = TranslationWGS84.ConvertToGaussKrueger(droneB * Math.PI / 180, droneL * Math.PI / 180);
+
+                (double targetX, double targetY) = TranslationWGS84.ConvertToGaussKrueger(targetB * Math.PI / 180, targetL * Math.PI / 180);
 
                 // Рассчитываем расстояние от первого наблюдателя до БПЛА (L1)
 
@@ -84,8 +81,6 @@ namespace WinForms
                 double sideB = Math.Sqrt(Math.Pow(droneX - targetX, 2) + Math.Pow(droneY - targetY, 2));
                 double sideC = Math.Sqrt(Math.Pow(droneX - observer1X, 2) + Math.Pow(droneY - observer1Y, 2));
 
-                MessageBox.Show($"{sideA}",
-                    "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 double angleA = Math.Sign(-((observer1X - droneX) * (targetY - droneY) - (observer1Y - droneY) * (targetX - droneX))) *
                     Math.Acos((sideB * sideB + sideC * sideC - sideA * sideA) / (2 * sideB * sideC))
@@ -102,8 +97,6 @@ namespace WinForms
                     Math.Acos((sideB * sideB + sideC * sideC - sideA * sideA) / (2 * sideB * sideC))
                     * 180 / Math.PI;
 
-                MessageBox.Show($"{sideA}",
-                    "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 textBox_Input_b.Text = angleB.ToString();
 
@@ -180,11 +173,9 @@ namespace WinForms
                 double observer2Z = BPLA_H + distanceToDroneFromObs2 * Math.Sin(Math.PI * angleBB / 180);
 
                 // Проецирование всех данных на плоскость гауса
-                double[] temp = TranslationWGS84.ConvertToGaussKrueger(observer1B / 180 * Math.PI, observer1L / 180 * Math.PI);
-                double observer1X = temp[0], observer1Y = temp[1];
+                (double observer1X, double observer1Y) = TranslationWGS84.ConvertToGaussKrueger(observer1B / 180 * Math.PI, observer1L / 180 * Math.PI);
 
-                temp = TranslationWGS84.ConvertToGaussKrueger(observer2B / 180 * Math.PI, observer2L / 180 * Math.PI);
-                double observer2X = temp[0], observer2Y = temp[1];
+                (double observer2X, double observer2Y) = TranslationWGS84.ConvertToGaussKrueger(observer2B / 180 * Math.PI, observer2L / 180 * Math.PI);
 
                 // Получаем координаты БПЛА и цели
                 double[][] result = TargetLocator.GetTargetCoordinates(
@@ -193,83 +184,16 @@ namespace WinForms
                     angleA, angleB, angleAA, angleBB, angleCC);
 
                 // Выводим результаты для БПЛА
-                double[] BPLA_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[0][0], result[0][1]);
-                textBox_Rez_BPLA_X.Text = (BPLA_WGS84[0] * 180 / Math.PI).ToString();
-                textBox_Rez_BPLA_Y.Text = (BPLA_WGS84[1] * 180 / Math.PI).ToString();
+                var BPLA_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[0][0], result[0][1]);
+                textBox_Rez_BPLA_X.Text = (BPLA_WGS84.B * 180 / Math.PI).ToString();
+                textBox_Rez_BPLA_Y.Text = (BPLA_WGS84.L * 180 / Math.PI).ToString();
                 textBox_Rez_BPLA_Z.Text = Math.Round(result[0][2], 5).ToString() + " М";
-                //textBox_Rez_BPLA_Z.Text = "";
 
                 // Выводим результаты для цели
-                double[] T_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[1][0], result[1][1]);
-                textBox_Rez_T_X.Text = (T_WGS84[0] * 180 / Math.PI).ToString();
-                textBox_Rez_T_Y.Text = (T_WGS84[1] * 180 / Math.PI).ToString();
+                var T_WGS84 = TranslationWGS84.ConvertFromGaussKrueger(result[1][0], result[1][1]);
+                textBox_Rez_T_X.Text = (T_WGS84.B * 180 / Math.PI).ToString();
+                textBox_Rez_T_Y.Text = (T_WGS84.L * 180 / Math.PI).ToString();
                 textBox_Rez_T_Z.Text = Math.Round(result[1][2], 5).ToString() + " М";
-                //textBox_Rez_T_Z.Text = "";
-
-
-                // Альтернативный расчет координат цели (векторный метод)
-                /*
-                double[][] alternativeResult = TargetLocator.GetTargetCoordinatesAlternative(
-                    observer1X, observer1Y, observer1Z, observer2X, observer2Y, observer2Z,
-                    distanceToDroneFromObs1, distanceToDroneFromObs2, distanceToTargetFromDrone,
-                    angleA, angleB, angleAA, angleBB, angleC);
-
-                textBox_v1_x.Text = Math.Round(alternativeResult[1][0], 5).ToString() + " X";
-                textBox_v1_y.Text = Math.Round(alternativeResult[1][1], 5).ToString() + " Y";
-                textBox_v1_z.Text = Math.Round(alternativeResult[1][2], 5).ToString() + " Z";
-                */
-
-                /*
-                // Расчет с учетом погрешностей
-                double errorL1 = double.Parse(textBox_dL1.Text);
-                double errorL2 = double.Parse(textBox_dL2.Text);
-                double errorL3 = double.Parse(textBox_dL3.Text);
-                double errorAngleC = double.Parse(textBox_dс.Text);
-                double errorAngleA = double.Parse(textBox_da.Text);
-                double errorAngleB = double.Parse(textBox_db.Text);
-                double errorAngleAA = double.Parse(textBox_daa.Text);
-                double errorAngleBB = double.Parse(textBox_dbb.Text);
-                try
-                {
-                    double[][] resultWithError = TargetLocator.GetTargetCoordinates(
-                                                observer1X, observer1Y, observer1Z,
-                                                observer2X, observer2Y, observer2Z,
-                                                distanceToDroneFromObs1 + errorL1,
-                                                distanceToDroneFromObs2 + errorL2,
-                                                distanceToTargetFromDrone + errorL3,
-                                                angleA + errorAngleA, angleB + errorAngleB,
-                                                angleAA + errorAngleAA, angleBB + errorAngleBB,
-                                                angleC + errorAngleC);
-
-
-                    // Выводим результаты с учетом погрешностей
-                    textBox_Rez_D_BPLA_X.Text = Math.Round(resultWithError[0][0], 5).ToString() + " X";
-                    textBox_Rez_D_BPLA_Y.Text = Math.Round(resultWithError[0][1], 5).ToString() + " Y";
-                    textBox_Rez_D_BPLA_Z.Text = Math.Round(resultWithError[0][2], 5).ToString() + " Z";
-                    textBox_Rez_D_T_X.Text = Math.Round(resultWithError[1][0], 5).ToString() + " X";
-                    textBox_Rez_D_T_Y.Text = Math.Round(resultWithError[1][1], 5).ToString() + " Y";
-                    textBox_Rez_D_T_Z.Text = Math.Round(resultWithError[1][2], 5).ToString() + " Z";
-
-                    // Рассчитываем отклонения из-за погрешностей
-                    textBox_Rez_BPLA.Text = Math.Sqrt(
-                        Math.Pow(result[0][0] - resultWithError[0][0], 2) +
-                        Math.Pow(result[0][1] - resultWithError[0][1], 2)).ToString();
-
-                    textBox_Rez_T.Text = Math.Sqrt(
-                        Math.Pow(result[1][0] - resultWithError[1][0], 2) +
-                        Math.Pow(result[1][1] - resultWithError[1][1], 2) +
-                        Math.Pow(result[1][2] - resultWithError[1][2], 2)).ToString();
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при обработке значений с погрешностью в 1 случае",
-                        "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                */
-
-                
-               
             
             }
             catch (Exception ex)
